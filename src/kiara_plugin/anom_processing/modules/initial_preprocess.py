@@ -55,3 +55,48 @@ class StringsPreprocess(KiaraModule):
         table_pa = pa.Table.from_pandas(df)
         
         outputs.set_value("preprocessed_table", table_pa)
+
+
+class ColumnNameReplace(KiaraModule):
+    """Replace columns names.
+
+    """
+
+    _module_type_name = "anom_processing.column_names_replace"
+
+    def create_inputs_schema(
+        self,
+    ) -> ValueMapSchema:
+
+
+        inputs = {
+            "table": {"type": "table", "doc": "The table for which one or more column names need to be replaced."},
+            "columns_map": {"type": "dict", "doc": "A dict mapping old cols (left) with new cols (right)."},
+        }
+
+        return inputs
+
+    def create_outputs_schema(
+        self,
+    ) -> ValueMapSchema:
+
+        outputs = {
+            "table": {
+                "type": "table",
+                "doc": "The table with standardised column names.",
+            }
+        }
+        return outputs
+
+    def process(self, inputs: ValueMap, outputs: ValueMap) -> None:
+
+        table_obj = inputs.get_value_obj("table")
+        columns_map = inputs.get_value_obj("columns_map").data
+
+        df = table_obj.data.to_pandas()
+
+        df = df.rename(columns = columns_map, inplace = True)
+
+        table_pa = pa.Table.from_pandas(df)
+        
+        outputs.set_value("table", table_pa)
