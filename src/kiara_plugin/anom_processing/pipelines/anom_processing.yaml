@@ -16,9 +16,9 @@ steps:
       table: filter_columns.value
   - module_type: anom_processing.column_names_replace
     step_id: replace_columns
-    input_links: preprocess_strings.preprocessed_table
+    input_links: 
+      table: preprocess_strings.preprocessed_table
 
 defaults:
   filter_columns__columns: ['name','placesdisplay','placesnormalized','corp','daterange','fullLink']
-  preprocess_strings__column_name: "placesdisplay"  
-  
+  preprocess_strings__column_name: "placesdisplay"
