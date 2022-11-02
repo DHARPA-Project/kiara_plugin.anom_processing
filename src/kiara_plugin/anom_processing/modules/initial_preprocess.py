@@ -99,10 +99,12 @@ class ColumnNameReplace(KiaraModule):
 
         table_obj = inputs.get_value_obj("table")
         columns_map = inputs.get_value_obj("columns_map").data
+        
+        new_cols = columns_map.dict_data
 
         df = table_obj.data.to_pandas()
 
-        df = df.rename(columns = columns_map, inplace = True)
+        df.rename(columns = new_cols, inplace = True)
 
         table_pa = pa.Table.from_pandas(df)
         
