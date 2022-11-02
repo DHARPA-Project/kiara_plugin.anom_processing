@@ -6,6 +6,8 @@ steps:
 # a step needs to be added to merge the 2 datasets (geolocated points)
   - module_type: import.table.from.csv_file
     step_id: import_table
+  - module_type: table_filter.select_columns
+    step_id: filter_columns
   - module_type: anom_processing.strings_preprocess
     step_id: preprocess_strings
   - module_type: anom_processing.column_names_replace
