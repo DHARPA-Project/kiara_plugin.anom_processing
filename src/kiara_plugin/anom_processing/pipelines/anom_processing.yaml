@@ -9,7 +9,7 @@ steps:
   - module_type: table_filter.select_columns
     step_id: filter_columns
     input_links:
-      table: import_table.table
+      value: import_table.table
   - module_type: anom_processing.strings_preprocess
     step_id: preprocess_strings
     input_links:
@@ -20,5 +20,7 @@ steps:
       table: preprocess_strings.preprocessed_table
 
 defaults:
+  import_table__path: "/Users/mariella.decrouychan/Desktop/personnel.csv"
   filter_columns__columns: ['name','placesdisplay','placesnormalized','corp','daterange','fullLink']
   preprocess_strings__column_name: "placesdisplay"
+  replace_columns.columns_map: {"fullLink":"dc:identifier"}
