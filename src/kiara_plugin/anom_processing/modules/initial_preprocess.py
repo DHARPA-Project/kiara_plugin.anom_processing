@@ -1,6 +1,8 @@
 from kiara import KiaraModule, KiaraModuleConfig, ValueMap, ValueMapSchema
 from pydantic import Field
 import pyarrow as pa
+import re
+
 
 class StringsPreprocess(KiaraModule):
     """Clean up strings that are embedded in array.
@@ -42,15 +44,20 @@ class StringsPreprocess(KiaraModule):
         column_name = inputs.get_value_obj("column_name").data
 
         df = table_obj.data.to_pandas()
-        
+
         def remove_arr(str_content):
-            if type(str_content) == str:
-                ls = eval(str_content)
-                return ls
-            else:
+            if str(str_content) == 'nan':
                 return float("NaN")
+            else:
+                rem = re.findall(r'^\[(...+)\]$',str_content)
+                if len(rem) > 0:
+                    return rem[0]
+                else:
+                    return str_content
+
         
         df[column_name] = df[column_name].apply(lambda x: remove_arr(x) )
+
 
         table_pa = pa.Table.from_pandas(df)
         

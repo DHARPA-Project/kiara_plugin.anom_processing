@@ -10,6 +10,7 @@ steps:
     step_id: filter_columns
     input_links:
       value: import_table.table
+  #the following module will need to be placed after dataframe merge
   - module_type: anom_processing.strings_preprocess
     step_id: preprocess_strings
     input_links:
@@ -23,4 +24,4 @@ defaults:
   import_table__path: "/Users/mariella.decrouychan/Desktop/personnel.csv"
   filter_columns__columns: ['name','placesdisplay','placesnormalized','corp','daterange','fullLink']
   preprocess_strings__column_name: "placesdisplay"
-  replace_columns__columns_map: {"fullLink":"dc:identifier"}
+  replace_columns__columns_map: {"fullLink":"dc_identifier"}
