@@ -1,0 +1,13 @@
+pipeline_name: "anom_processing"
+doc: |
+  A pipeline to process anom data 
+steps:
+# not tested yet
+# a step needs to be added to merge the 2 datasets (geolocated points)
+  - module_type: import.table.from.csv_file
+    step_id: import_table
+  - module_type: anom_processing.strings_preprocess
+    step_id: preprocess_strings
+  - module_type: anom_processing.column_names_replace
+    step_id: replace_columns
+  
