@@ -23,4 +23,4 @@ defaults:
   import_table__path: "/Users/mariella.decrouychan/Desktop/personnel.csv"
   filter_columns__columns: ['name','placesdisplay','placesnormalized','corp','daterange','fullLink']
   preprocess_strings__column_name: "placesdisplay"
-  replace_columns.columns_map: {"fullLink":"dc:identifier"}
+  replace_columns__columns_map: {"fullLink":"dc:identifier"}
