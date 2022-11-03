@@ -180,7 +180,7 @@ class CoordsCheck(KiaraModule):
             "table2": {"type": "table", "doc": "The table that contains latitude and longitude information."},
             "column1": {"type": "string", "doc": "The column that contains the place names in table 1."},
             "column2": {"type": "string", "doc": "The column that contains the place names in table 2."},
-            "sample_nr": {"type": "integer", "doc": "Number of observations to include. As this operation is very intensive it is advised to use a sample."},
+            "sample_nr": {"type": "integer", "optional": True, "default": None, "doc": "Number of observations to include in case it is performed on a sample."},
         }
 
         return inputs
@@ -212,9 +212,11 @@ class CoordsCheck(KiaraModule):
         num_sample = inputs.get_value_obj("sample_nr").data
 
         df1 = table_obj1.data.to_pandas()
-        df1 = df1.sample(n=num_sample, random_state=1)
-        df2 = table_obj2.data.to_pandas()
+        
+        if num_sample is not None:
+            df1 = df1.sample(n=num_sample, random_state=1)
 
+        df2 = table_obj2.data.to_pandas()
 
         col_loc = df1.columns.get_loc(col1)
         
@@ -222,6 +224,7 @@ class CoordsCheck(KiaraModule):
 
         for index, row in enumerate(df1.itertuples(index=False)):
             #this is not very elegant but no time to make it right
+            # also there seems to be some empty row[col_loc] so the process needs to be improved
             item = re.sub(r"^'",'"',row[col_loc])
             item = re.sub(r"'$",'"',item)
             try:
@@ -230,7 +233,9 @@ class CoordsCheck(KiaraModule):
                     if place not in places:
                         places.append(place)
             except:
-                print(f"{item} not evaluated")
+                # temporary, as a reminder to investigate why there seems to be some empty row[col_loc]
+                not_eval = row[col_loc]
+
                                 
 
         not_found_ls = [item for item in places if item not in list(df2[col2])]
